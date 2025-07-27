@@ -1,10 +1,8 @@
-# CSS Notes
-
 ## CSS Basics
 
 - `CSS (Cascading Style Sheets)`
-- used to style and visually format HTML content on web pages.
-- controls layout, colors, fonts, spacing, animations, responsiveness, and more.
+- used to `style and visually format` HTML content on web pages.
+- controls `layout`, `colors`, `fonts`, `spacing`, `animations`, `responsiveness`, and more.
 - `Syntax:` Selector { property: value; }
 
 ```css
@@ -27,40 +25,16 @@ p {
 
 ## How to Add CSS
 
-1. `Inline:` `style="property: value;"` - Adds styles directly to an HTML element.
-
-```html
-<p style="color: red;">Hello, World!</p>
-```
-
-2. `Internal:` `<style>` tag in `<head>` - Styles apply to the entire document.
-
-```html
-<style>
-  p {
-    color: green;
-  }
-</style>
-```
-
-3. `External:` Linked `.css` file using `<link>` - Preferred method for reusability.
-
-```html
-<link rel="stylesheet" href="styles.css" />
-```
-
----
-
-## CSS Specificity
-
-- Determines `which rule applies when multiple rules match` the same element.
-- `Order of importance:`
-
-```
-Inline > ID Selector > Class/Attribute/Pseudo-Class > Element/Pseudo-Element.
-```
-
-- `Example:` Inline (1000), ID (100), Class (10), Element (1).
+| **Aspect**          | **Inline**                          | **Internal**                       | **External**             |
+| ------------------- | ----------------------------------- | ---------------------------------- | ------------------------ |
+| **Written in**      | `style` attribute.                  | `<style>` in `<head>`.             | Separate `.css` file.    |
+| **Syntax Example**  | `<h1 style="color:red;">Hello</h1>` | `<style>h1 {color: blue;}</style>` | `h1 { color: green; }`   |
+| **Scope**           | Single element.                     | One page.                          | Multiple pages.          |
+| **Reusability**     | ❌ None.                            | ❌ Page-specific.                  | ✅ Fully reusable.       |
+| **Maintainability** | ❌ Poor.                            | ⚠️ Medium.                         | ✅ Best (centralized).   |
+| **Performance**     | ⚠️ Slightly faster.                 | ⚠️ Loads with HTML.                | ✅ Cached, faster.       |
+| **Best for**        | Quick fixes/testing.                | Single-page styles.                | Full sites/pro projects. |
+| **Readability**     | ❌ Messy.                           | ⚠️ Better.                         | ✅ Clean separation.     |
 
 ---
 
@@ -74,171 +48,36 @@ Inline > ID Selector > Class/Attribute/Pseudo-Class > Element/Pseudo-Element.
 
 ---
 
-### Logical & Relational Pseudo-Classes
+## Specificity Hierarchy Table
 
-### ✅ `:not(selector)`
+| **Selector Type**       | **Example**                | **Specificity Value** | **Explanation**                                                                                     |
+| ----------------------- | -------------------------- | --------------------- | --------------------------------------------------------------------------------------------------- |
+| **Inline styles**       | `<div style="color:red;">` | **1000**              | Applied directly to the element in the `style` attribute. **Always wins** over other selectors.     |
+| **ID selectors**        | `#main`                    | **100**               | Each ID used in a selector adds 100 to the score.                                                   |
+| **Class selectors**     | `.box`, `.active`          | **10**                | Each class, attribute selector (`[type="text"]`), or pseudo-class (`:hover`, `:nth-child`) adds 10. |
+| **Attribute selectors** | `[type="checkbox"]`        | **10**                | Same level as classes.                                                                              |
+| **Pseudo-classes**      | `:hover`, `:first-child`   | **10**                | Also add 10 to the score.                                                                           |
+| **Element selectors**   | `div`, `p`, `h1`           | **1**                 | Each element or pseudo-element (`::before`, `::after`) adds 1.                                      |
+| **Universal selector**  | `*`                        | **0**                 | Has **no effect** on specificity.                                                                   |
+| **Combinators**         | `div > p`, `ul li`         | **0**                 | `>`, `+`, `~`, whitespace do not add to specificity.                                                |
 
-- Excludes specific elements from selection
+### **How Specificity is Calculated**
 
-```css
-button:not(.primary) {
-  background: gray;
-}
+Think of it as a **4-part number:**
+
+```
+Inline Styles : IDs : Classes/Attributes/Pseudo-classes : Elements/Pseudo-elements
 ```
 
----
+For example:
 
-### ✅ `:is(selector1, selector2, …)`
+- `#header .nav li` → `0,1,1,1` → **100 + 10 + 1 = 111**
+- `div p` → `0,0,0,2` → **2**
+- `style="color:red;"` → `1,0,0,0` → **1000**
 
-- Groups multiple selectors (affects specificity)
+### **Important Notes**
 
-```css
-:is(h1, h2, h3) {
-  font-family: "Montserrat", sans-serif;
-}
-```
-
-✅ Helps you `DRY` out large grouped selectors.
-
----
-
-### ✅ `:where(selector1, selector2, …)`
-
-- Like `:is()` but has `0 specificity`
-
-```css
-:where(article, section) p {
-  line-height: 1.6;
-}
-```
-
-Great for `utility-first CSS` frameworks.
-
----
-
-### ✅ `:has(selector)` (🔬 Advanced — Only in modern browsers)
-
-- Parent selector — applies style `if child exists`
-
-```css
-.card:has(img) {
-  border: 1px solid green;
-}
-```
-
-```css
-form:has(:invalid) {
-  outline: 2px solid red;
-}
-```
-
-- Supported in Chrome, Edge, Safari (not Firefox yet).
-
----
-
-### Combining Selectors
-
-```css
-input[type="checkbox"]:checked + label {
-  font-weight: bold;
-}
-```
-
-```css
-.card:not(:has(img)) {
-  padding-top: 2rem;
-}
-```
-
----
-
-## 🧾 Cheatsheet Summary
-
-```css
-/* Logical */
-:is(h1, h2, h3) {
-}
-:where(.box, .card) {
-}
-:not(.disabled) {
-}
-:has(input:focus) {
-}
-
-/* Structural */
-li:first-child {
-}
-div:nth-of-type(2n) {
-}
-p:empty {
-}
-
-/* State */
-a:hover {
-}
-input:checked {
-}
-button:disabled {
-}
-
-/* Attributes */
-input[type="text"] {
-}
-a[href^="https://"]
-{
-}
-```
-
----
-
-## ⚠️ Specificity Tips
-
-| Selector   | Specificity                      |
-| ---------- | -------------------------------- |
-| `element`  | 0-0-1                            |
-| `.class`   | 0-1-0                            |
-| `#id`      | 1-0-0                            |
-| `:is()`    | Takes highest specificity inside |
-| `:where()` | Always 0                         |
-
----
-
-## 🧪 Browser Support (as of 2025)
-
-| Feature    | Chrome | Safari | Firefox | Edge |
-| ---------- | ------ | ------ | ------- | ---- |
-| `:is()`    | ✅     | ✅     | ✅      | ✅   |
-| `:where()` | ✅     | ✅     | ✅      | ✅   |
-| `:not()`   | ✅     | ✅     | ✅      | ✅   |
-| `:has()`   | ✅     | ✅     | ❌      | ✅   |
-
----
-
-## ✅ Real-World Use Cases
-
-- `Avoid writing multiple selectors`:
-
-  ```css
-  :is(button, a, input[type="submit"]) {
-    padding: 0.75rem;
-  }
-  ```
-
-- `Theme toggling`:
-
-  ```css
-  html:has(.dark-mode) {
-    background-color: #121212;
-  }
-  ```
-
-- `Selective form validation`:
-
-  ```css
-  form:has(:invalid) .submit {
-    background: red;
-  }
-  ```
+- **Inline styles** override everything except `!important`.
 
 ---
 
@@ -246,240 +85,284 @@ a[href^="https://"]
 
 - targets an element based on its `state, position, or characteristics` — but `without modifying the DOM`.
 
-> Think: "Which element?" (based on a condition)
-
-### 🔹 Syntax:
+**Syntax:**
 
 ```css
 selector:pseudo-class {
-  /* styles */
+  property: value;
 }
 ```
 
-### ✅ Examples:
+### **Categories of Pseudo-Classes**
 
-```css
-a:hover {
-  color: red; /* When user hovers */
-}
+### **1. User-Action Pseudo-Classes** (interaction states)
 
-li:first-child {
-  font-weight: bold; /* First <li> only */
-}
+| Pseudo-Class     | Example                | Purpose                                            |
+| ---------------- | ---------------------- | -------------------------------------------------- |
+| `:hover`         | `a:hover`              | When a user hovers over an element.                |
+| `:active`        | `button:active`        | When an element is being clicked.                  |
+| `:focus`         | `input:focus`          | When an element is focused.                        |
+| `:focus-visible` | `button:focus-visible` | When focus is visible (e.g., keyboard navigation). |
+| `:focus-within`  | `div:focus-within`     | When an element or its children have focus.        |
+| `:target`        | `#section:target`      | When an element matches the page URL fragment.     |
 
-input:checked {
-  border: 2px solid green; /* Checked checkboxes/radios */
-}
-```
+### **2. Structural Pseudo-Classes** (based on position/structure)
 
-### 📌 Common Pseudo-Classes:
+| Pseudo-Class           | Example                 | Purpose                                 |
+| ---------------------- | ----------------------- | --------------------------------------- |
+| `:first-child`         | `li:first-child`        | First child of its parent.              |
+| `:last-child`          | `li:last-child`         | Last child of its parent.               |
+| `:only-child`          | `p:only-child`          | Element that is the only child.         |
+| `:nth-child(n)`        | `li:nth-child(2n)`      | Selects based on position (1st, 2nd…).  |
+| `:nth-last-child(n)`   | `li:nth-last-child(1)`  | Counts from the end.                    |
+| `:first-of-type`       | `p:first-of-type`       | First occurrence of an element type.    |
+| `:last-of-type`        | `p:last-of-type`        | Last occurrence of an element type.     |
+| `:nth-of-type(n)`      | `p:nth-of-type(2)`      | nth occurrence of a specific element.   |
+| `:nth-last-of-type(n)` | `p:nth-last-of-type(1)` | Counts from the end for a type.         |
+| `:only-of-type`        | `p:only-of-type`        | The only element of its type in parent. |
+| `:empty`               | `div:empty`             | No children (text or elements).         |
 
-| Pseudo-Class    | Meaning                        |
-| --------------- | ------------------------------ |
-| `:hover`        | When mouse is over an element  |
-| `:focus`        | When element is focused        |
-| `:active`       | While element is being clicked |
-| `:checked`      | For checkboxes/radio inputs    |
-| `:disabled`     | Disabled inputs/buttons        |
-| `:first-child`  | First child of a parent        |
-| `:nth-child(3)` | 3rd child element              |
-| `:not()`        | Excludes matching elements     |
+### **3. Logical & Relational Pseudo-Classes**
+
+| **Pseudo-Class**     | **Example**         | **Purpose**                                                                                        |
+| -------------------- | ------------------- | -------------------------------------------------------------------------------------------------- |
+| **`:is()`**          | `:is(h1, h2, h3)`   | Matches **any element** in a list of selectors. **Doesn’t increase specificity** of its arguments. |
+| **`:where()`**       | `:where(article p)` | Similar to `:is()`, but **always has zero specificity**. Good for **scoped defaults**.             |
+| **`:not()`**         | `p:not(.highlight)` | Matches elements **that do NOT match** a selector.                                                 |
+| **`:has()`**         | `div:has(img)`      | Matches an element **that contains** another matching element. Works like a **parent selector**.   |
+| **`:nth-child()`**   | `li:nth-child(2n)`  | Selects **specific children** (even, odd, nth index).                                              |
+| **`:nth-of-type()`** | `p:nth-of-type(2)`  | Selects the **nth child** of a specific **element type**.                                          |
+| **`:only-child`**    | `p:only-child`      | Selects an element if it’s the **only child** in its parent.                                       |
+| **`:empty`**         | `div:empty`         | Selects elements with **no children or text**.                                                     |
+
+### **4. State & Validation Pseudo-Classes**
+
+| Pseudo-Class    | Example              | Purpose                            |
+| --------------- | -------------------- | ---------------------------------- |
+| `:checked`      | `input:checked`      | Selected checkboxes/radio buttons. |
+| `:enabled`      | `input:enabled`      | Inputs that are enabled.           |
+| `:disabled`     | `input:disabled`     | Disabled inputs.                   |
+| `:required`     | `input:required`     | Required form fields.              |
+| `:optional`     | `input:optional`     | Optional form fields.              |
+| `:valid`        | `input:valid`        | Input value is valid.              |
+| `:invalid`      | `input:invalid`      | Input value is invalid.            |
+| `:in-range`     | `input:in-range`     | Input value within allowed range.  |
+| `:out-of-range` | `input:out-of-range` | Input value outside allowed range. |
+| `:read-only`    | `input:read-only`    | Input marked as read-only.         |
+| `:read-write`   | `input:read-write`   | Input editable by the user.        |
+
+### **5. Resource & Content Pseudo-Classes**
+
+| Pseudo-Class | Example      | Purpose                                 |
+| ------------ | ------------ | --------------------------------------- |
+| `:root`      | `:root`      | Represents the document root (HTML).    |
+| `:lang()`    | `p:lang(en)` | Matches elements by language attribute. |
 
 ---
 
 ## CSS Pseudo-Element?
 
 - targets `a specific part` of an element — like the first letter, line, or adds content `before/after` it.
+- e.g., the first letter, before/after content, etc.
 
-> Think: "Which `part` of this element?"
-
-### 🔹 Syntax:
+**Syntax:**
 
 ```css
 selector::pseudo-element {
-  /* styles */
+  property: value;
 }
 ```
 
-> ⚠️ Uses `double colons `::``, unlike pseudo-classes.
+> **Note:** Modern CSS uses **double colons `::`** for pseudo-elements to differentiate them from pseudo-classes (single colon `:`).
 
-### ✅ Examples:
+## **List of Common Pseudo-Elements**
+
+| **Pseudo-Element**       | **Example**                   | **Purpose**                                      |
+| ------------------------ | ----------------------------- | ------------------------------------------------ |
+| `::before`               | `p::before`                   | Inserts content **before** an element’s content. |
+| `::after`                | `p::after`                    | Inserts content **after** an element’s content.  |
+| `::first-letter`         | `p::first-letter`             | Styles the **first letter** of text.             |
+| `::first-line`           | `p::first-line`               | Styles the **first line** of text.               |
+| `::selection`            | `p::selection`                | Styles text **highlighted by the user**.         |
+| `::placeholder`          | `input::placeholder`          | Styles the **placeholder text** in inputs.       |
+| `::marker`               | `li::marker`                  | Styles **list item markers** (e.g., bullets).    |
+| `::backdrop`             | `dialog::backdrop`            | Styles the **backdrop** of a `<dialog>` element. |
+| `::file-selector-button` | `input::file-selector-button` | Styles the **file upload button**.               |
+| `::cue`                  | `video::cue`                  | Styles **WebVTT captions** in media elements.    |
+| `::part()`               | `my-element::part(header)`    | Styles **parts of a shadow DOM** component.      |
+
+### **`::before` & `::after`**
+
+- Add **extra content** without modifying HTML.
 
 ```css
-p::first-line {
-  text-transform: uppercase;
+button::before {
+  content: "🔥";
+  margin-right: 5px;
 }
-
-h1::before {
-  content: "🔹 ";
-}
-
-input::placeholder {
-  color: gray;
-}
-```
-
-### 📌 Common Pseudo-Elements:
-
-| Pseudo-Element   | Meaning                             |
-| ---------------- | ----------------------------------- |
-| `::before`       | Adds content `before` element       |
-| `::after`        | Adds content `after` element        |
-| `::first-line`   | Targets the `first line` of text    |
-| `::first-letter` | Targets the `first character`       |
-| `::placeholder`  | Styles the placeholder of inputs    |
-| `::selection`    | Styles text when user highlights it |
-
----
-
-### 🧠 Key Differences
-
-| Feature       | Pseudo-Class (`:focus`)         | Pseudo-Element (`::before`) |
-| ------------- | ------------------------------- | --------------------------- |
-| Targets       | Entire element (based on state) | Part of the element         |
-| Uses colon    | Single `:`                      | Double `::`                 |
-| DOM presence  | Doesn't add content             | Can insert content          |
-| Interactivity | Often interactive               | Mostly decorative           |
-
----
-
-### 👀 Visual Example
-
-```html
-<a href="#">Click Me</a>
-```
-
-```css
-/* Pseudo-class */
-a:hover {
-  color: red; /* When hovered */
-}
-
-/* Pseudo-element */
-a::after {
-  content: " ➤"; /* Adds after the link */
+button::after {
+  content: " →";
 }
 ```
 
 ---
 
-### ✅ Use Together
+### 🧠 Pseudo-Class vs Pseudo-Element
 
-```css
-button:hover::after {
-  content: " ✅";
-}
-```
-
-- `:hover` → when user hovers
-- `::after` → adds a checkmark
-
----
-
-### 🧾 Summary
-
-| Selector Type  | Prefix | Targets                   | Example                      |
-| -------------- | ------ | ------------------------- | ---------------------------- |
-| Pseudo-Class   | `:`    | Element's `state` or role | `:hover`, `:first-child`     |
-| Pseudo-Element | `::`   | `Part` of the element     | `::before`, `::first-letter` |
+| **Aspect**                                          | **Pseudo-Class**                                                                     | **Pseudo-Element**                                                                                             |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
+| **Definition**                                      | Represents a **state** or **condition** of an element.                               | Represents a **part of an element** or **generated content**.                                                  |
+| **Syntax**                                          | Uses a **single colon** `:`. <br>_Example:_ `a:hover`                                | Uses **double colons** `::`. <br>_Example:_ `p::before`                                                        |
+| **Purpose**                                         | Used to style elements **based on interaction, position, or logical conditions**.    | Used to **style specific parts of an element** or **insert virtual content**.                                  |
+| **Examples**                                        | `:hover`, `:first-child`, `:not()`, `:focus`                                         | `::before`, `::after`, `::first-letter`, `::placeholder`                                                       |
+| **Does it create new content?**                     | **No** – It only changes styles based on state.                                      | **Yes** – Can **generate content** using `content:` (e.g., `::before`, `::after`).                             |
+| **Affects DOM?**                                    | **No** – Does not alter the DOM structure.                                           | **No** – Doesn't actually add nodes, but visually affects content.                                             |
+| **Can it style part of an element’s text/content?** | **No** – Targets whole elements only.                                                | **Yes** – Can target **specific portions** (first letter, first line, list markers).                           |
+| **Specificity**                                     | Acts like **class selectors** (specificity: 0,1,0).                                  | Acts like **element selectors** (specificity: 0,0,0,1).                                                        |
+| **Interactivity**                                   | Often used for **user interactions** (hover, focus, active).                         | Mostly **decorative/content-related** styling.                                                                 |
+| **Introduced in**                                   | **CSS1/2** (and newer pseudo-classes in CSS3).                                       | **CSS2** (with more added in CSS3).                                                                            |
+| **Common Use Cases**                                | - Highlight links on `:hover`<br>- Style first/last child<br>- Exclude with `:not()` | - Add icons/text using `::before`/`::after`<br>- Style first letters<br>- Customize placeholder & list markers |
 
 ---
 
 ## CSS Colors
 
 - Define the color of elements using different formats.
-- `Formats:` `name`, `hex (#rrggbb)`, `rgb(r,g,b)`, `rgba(r,g,b,a)`.
+- Types of CSS Color Values
 
-```css
-color: rgba(255, 0, 0, 0.5);
-```
+| **Type**          | **Example**                   | **Range / Notes**                                           | **Use Case**                           |
+| ----------------- | ----------------------------- | ----------------------------------------------------------- | -------------------------------------- |
+| **Named Colors**  | `color: red;`                 | 140+ predefined names (`red`, `blue`, `teal`).              | Quick & simple colors.                 |
+| **Hexadecimal**   | `#ff0000`                     | `#RRGGBB` (0–255 per channel). Supports shorthand (`#f00`). | Most common for solid colors.          |
+| **RGB**           | `rgb(255,0,0)`                | `rgb(R,G,B)` where each is `0–255`.                         | Easy to work with digital colors.      |
+| **RGBA**          | `rgba(255,0,0,0.5)`           | Adds **alpha** channel (`0–1`) for transparency.            | Semi-transparent colors.               |
+| **HSL**           | `hsl(0,100%,50%)`             | Hue (0–360), Saturation (0–100%), Lightness (0–100%).       | Human-friendly color adjustments.      |
+| **HSLA**          | `hsla(0,100%,50%,0.5)`        | HSL + **alpha** channel for transparency.                   | Smooth color transitions.              |
+| **CurrentColor**  | `border-color: currentColor;` | Uses the **element’s text color**.                          | Maintain consistent color scheme.      |
+| **Transparent**   | `background: transparent;`    | Fully transparent color.                                    | Remove color without removing element. |
+| **System Colors** | `Canvas`, `CanvasText`        | New in CSS Color Module Level 4.                            | Match OS/system theme colors.          |
 
 ---
 
 ## CSS Background
 
 - Set background styles for elements.
-- `Properties:` `background-color`, `background-image`, `background-repeat`, `background-position`, `background-size`.
+- CSS Background Properties Table
 
-```css
-background-image: url("image.jpg");
-background-size: cover;
-```
+| **Property**                              | **Example**                                                 | **Purpose**                                                                                                      |
+| ----------------------------------------- | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| **`background-color`**                    | `background-color: #f0f0f0;`                                | Sets a **solid background color**.                                                                               |
+| **`background-image`**                    | `background-image: url('img.jpg');`                         | Adds an **image** or **gradient** as a background.                                                               |
+| **`background-repeat`**                   | `background-repeat: no-repeat;`                             | Controls if/how the image repeats (**repeat**, **repeat-x**, **repeat-y**, **no-repeat**, **space**, **round**). |
+| **`background-position`**                 | `background-position: center top;`                          | Sets the **starting position** of the background image.                                                          |
+| **`background-size`**                     | `background-size: cover;`                                   | Sets the **scaling** of the image (**auto**, **cover**, **contain**, or custom values).                          |
+| **`background-attachment`**               | `background-attachment: fixed;`                             | Determines if the background **scrolls** with the content (**scroll**, **fixed**, **local**).                    |
+| **`background-clip`**                     | `background-clip: content-box;`                             | Defines the **painting area** (**border-box**, **padding-box**, **content-box**, **text**).                      |
+| **`background-origin`**                   | `background-origin: content-box;`                           | Sets **where the background image starts** (**border-box**, **padding-box**, **content-box**).                   |
+| **`background-blend-mode`**               | `background-blend-mode: multiply;`                          | Blends background layers with a chosen **blend mode** (e.g., multiply, overlay).                                 |
+| **`background`**                          | `background: url('img.jpg') no-repeat center/cover;`        | **Shorthand** to set multiple background properties in one line.                                                 |
+| **`background-image: linear-gradient()`** | `background-image: linear-gradient(to right, red, yellow);` | Adds a **gradient** as a background.                                                                             |
 
 ---
 
 ## CSS Gradient
 
-### Linear Gradient
-
-- Creates a `gradual transition` between `colors along a straight line.`
-- `background: linear-gradient(direction, color1, color2, ...);`
-
-```css
-background: linear-gradient(to right, red 30%, blue 70%);
-```
-
-### Radial Gradient
-
-- Creates a `gradual transition` between `colors radiating from a central point`.
-- `background: radial-gradient(shape size at position, color1, color2, ...);`
-
-```css
-background: radial-gradient(circle, red, yellow, blue);
-```
+| **Type**                      | **Function**                  | **Example**                                                      | **Purpose / When to Use**                                                                                                                   |
+| ----------------------------- | ----------------------------- | ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Linear Gradient**           | `linear-gradient()`           | `linear-gradient(to right, red, yellow)`                         | Creates a **smooth color transition in a straight line** (horizontal, vertical, diagonal). Ideal for **backgrounds, buttons, and banners**. |
+| **Radial Gradient**           | `radial-gradient()`           | `radial-gradient(circle, red, yellow)`                           | Creates a **color blend radiating from a center point**. Good for **spotlight effects, highlights, or circular backgrounds**.               |
+| **Conic Gradient**            | `conic-gradient()`            | `conic-gradient(from 90deg, red, yellow, blue)`                  | Creates a **circular color sweep around a center point**. Great for **charts, dials, or artistic circular patterns**.                       |
+| **Repeating Linear Gradient** | `repeating-linear-gradient()` | `repeating-linear-gradient(45deg, red 0 10px, blue 10px 20px)`   | Repeats a **linear gradient pattern**. Useful for **stripes, textures, or patterned backgrounds**.                                          |
+| **Repeating Radial Gradient** | `repeating-radial-gradient()` | `repeating-radial-gradient(circle, #fff 0 10px, #ccc 10px 20px)` | Repeats a **radial gradient pattern**. Perfect for **polka dots, circular textures, or layered radial effects**.                            |
 
 ---
 
 ## Border CSS
 
 - Define the border around elements.
-- `Properties:` `border`, `border-width`, `border-style`, `border-color`.
 
-```css
-border: 1px solid black;
-```
+| **Property**                       | **Example**                               | **Purpose / When to Use**                                                                                               |
+| ---------------------------------- | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| **`border`** (shorthand)           | `border: 2px solid black;`                | Sets **width, style, and color** in one line. Quick border styling.                                                     |
+| **`border-width`**                 | `border-width: 1px 2px 3px 4px;`          | Controls **thickness** (can set individually for top/right/bottom/left).                                                |
+| **`border-style`**                 | `border-style: solid dashed none dotted;` | Controls **line style**: `solid`, `dashed`, `dotted`, `double`, `groove`, `ridge`, `inset`, `outset`, `none`, `hidden`. |
+| **`border-color`**                 | `border-color: red green blue yellow;`    | Sets **color** for each side individually.                                                                              |
+| **`border-radius`**                | `border-radius: 10px;`                    | Rounds **corners** of borders (for circles, pills, smooth edges).                                                       |
+| **`border-top/right/bottom/left`** | `border-top: 3px solid red;`              | Controls **individual sides** of a border.                                                                              |
+| **`border-image`**                 | `border-image: url(border.png) 30 round;` | Uses an **image as a border** (decorative frames).                                                                      |
+| **`outline`** (related)            | `outline: 2px dashed blue;`               | Adds a **border-like highlight outside the box** (does not affect layout).                                              |
 
 ---
 
 ## Text CSS
 
 - Style the text within elements.
-- `Properties:` `color`, `text-align`, `text-decoration`, `line-height`, `letter-spacing`.
 
-```css
-text-align: center;
-line-height: 1.5;
-```
+| **Property**                    | **Example**                       | **Purpose / When to Use**                                                                   |
+| ------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
+| **`color`**                     | `color: #333;`                    | Sets **text color**.                                                                        |
+| **`text-align`**                | `text-align: center;`             | Aligns text **(left, right, center, justify)**.                                             |
+| **`text-transform`**            | `text-transform: uppercase;`      | Converts text to **uppercase, lowercase, or capitalize**.                                   |
+| **`text-decoration`**           | `text-decoration: underline;`     | Adds **underline, overline, line-through** or removes them.                                 |
+| **`text-decoration-color`**     | `text-decoration-color: red;`     | Sets **color of underline/decoration**.                                                     |
+| **`text-decoration-style`**     | `text-decoration-style: wavy;`    | Makes decoration **solid, dotted, dashed, double, wavy**.                                   |
+| **`text-decoration-thickness`** | `text-decoration-thickness: 3px;` | Sets **thickness** of underline/decoration.                                                 |
+| **`text-shadow`**               | `text-shadow: 2px 2px 5px gray;`  | Adds **shadow** for depth or glow effects.                                                  |
+| **`text-indent`**               | `text-indent: 50px;`              | Indents the **first line of a paragraph**.                                                  |
+| **`letter-spacing`**            | `letter-spacing: 2px;`            | Controls **space between letters**.                                                         |
+| **`word-spacing`**              | `word-spacing: 5px;`              | Controls **space between words**.                                                           |
+| **`line-height`**               | `line-height: 1.8;`               | Controls **vertical space between lines**.                                                  |
+| **`white-space`**               | `white-space: nowrap;`            | Controls **how text wraps** (nowrap, pre, pre-line, pre-wrap).                              |
+| **`word-break`**                | `word-break: break-word;`         | Handles **word-breaking in narrow spaces**.                                                 |
+| **`overflow-wrap`**             | `overflow-wrap: break-word;`      | Similar to `word-break` but better for natural wrapping.                                    |
+| **`direction`**                 | `direction: rtl;`                 | Sets text direction **(ltr, rtl)**.                                                         |
+| **`writing-mode`**              | `writing-mode: vertical-rl;`      | Displays text **vertically or horizontally**.                                               |
+| **`text-overflow`**             | `text-overflow: ellipsis;`        | Adds `...` for **truncated text** (used with `white-space: nowrap;` & `overflow: hidden;`). |
 
 ---
 
 ## Fonts CSS
 
 - Set the font styles for text.
-- `Properties:` `font-family`, `font-size`, `font-weight`, `font-style`.
 
-```css
-font-family: Arial, sans-serif;
-font-size: 16px;
-```
+| **Property**                | **Example**                                 | **Purpose / When to Use**                                        |
+| --------------------------- | ------------------------------------------- | ---------------------------------------------------------------- |
+| **`font-family`**           | `font-family: "Roboto", Arial, sans-serif;` | Sets the **typeface**. Always use **fallback fonts**.            |
+| **`font-size`**             | `font-size: 16px;`                          | Sets **text size** (use `px`, `em`, `rem`, `%`).                 |
+| **`font-weight`**           | `font-weight: 700;`                         | Controls **thickness** of text (`normal`, `bold`, `100–900`).    |
+| **`font-style`**            | `font-style: italic;`                       | Makes text **italic or normal**.                                 |
+| **`font-variant`**          | `font-variant: small-caps;`                 | Converts text to **small caps** (e.g., “CSS” → “ᴄss”).           |
+| **`font-stretch`**          | `font-stretch: condensed;`                  | Adjusts **font width** (`ultra-condensed` to `ultra-expanded`).  |
+| **`line-height`**           | `line-height: 1.6;`                         | Controls **spacing between lines** for readability.              |
+| **`letter-spacing`**        | `letter-spacing: 1px;`                      | Adjusts **spacing between letters**.                             |
+| **`word-spacing`**          | `word-spacing: 4px;`                        | Adjusts **spacing between words**.                               |
+| **`font-variant-numeric`**  | `font-variant-numeric: tabular-nums;`       | Controls **numeric display** (e.g., lining, old-style, tabular). |
+| **`font-kerning`**          | `font-kerning: normal;`                     | Adjusts **spacing between characters** based on font metrics.    |
+| **`font-feature-settings`** | `font-feature-settings: "liga" 1;`          | Enables **OpenType features** (ligatures, stylistic alternates). |
+| **`@font-face`**            | See below                                   | Allows **custom fonts** to be loaded.                            |
 
 ---
 
 ## Height and Width CSS
 
 - Define dimensions of elements.
-- `Properties:` `height`, `width`, `max-width`, `min-height`.
 
-```css
-height: 100px;
-width: 50%;
-```
+| **Property**       | **Example**               | **Purpose / When to Use**                                                                                            |
+| ------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| **`width`**        | `width: 300px;`           | Sets the **horizontal size** of an element.                                                                          |
+| **`height`**       | `height: 200px;`          | Sets the **vertical size** of an element.                                                                            |
+| **`min-width`**    | `min-width: 150px;`       | Ensures the element **doesn’t shrink below** a certain width.                                                        |
+| **`max-width`**    | `max-width: 600px;`       | Ensures the element **doesn’t grow beyond** a certain width.                                                         |
+| **`min-height`**   | `min-height: 100px;`      | Ensures the element **doesn’t shrink below** a certain height.                                                       |
+| **`max-height`**   | `max-height: 400px;`      | Ensures the element **doesn’t grow beyond** a certain height.                                                        |
+| **`box-sizing`**   | `box-sizing: border-box;` | Defines how height/width are calculated (**content-box** = excludes padding/border, **border-box** = includes them). |
+| **`aspect-ratio`** | `aspect-ratio: 16/9;`     | Keeps **proportional dimensions** for elements (good for images/videos).                                             |
 
 ---
 
 ## Box Model?
 
-Every HTML element is treated as a `box`, and the `CSS Box Model` defines how that box is structured in terms of:
+- Every HTML element is treated as a `box`, and the `CSS Box Model` defines how that box is structured in terms of:
 
 ### 🔍 Visualization (text version)
 
@@ -497,13 +380,12 @@ Every HTML element is treated as a `box`, and the `CSS Box Model` defines how th
 
 ### 🧮 Box Model Properties
 
-| Property  | Description                          |
-| --------- | ------------------------------------ |
-| `margin`  | Space `outside` the element's border |
-| `border`  | Thickness and style of the edge      |
-| `padding` | Space `inside` the box               |
-| `width`   | Width of the content area            |
-| `height`  | Height of the content area           |
+| **Layer**   | **Purpose**                                                 | **Example**          |
+| ----------- | ----------------------------------------------------------- | -------------------- |
+| **Content** | The actual content area (text, images).                     | `width`, `height`    |
+| **Padding** | Creates space **inside the box**, between content & border. | `padding: 10px;`     |
+| **Border**  | The visible line surrounding padding & content.             | `border: 2px solid;` |
+| **Margin**  | Creates **space between elements**.                         | `margin: 20px;`      |
 
 ---
 
@@ -724,82 +606,6 @@ Relative units `adapt to context`, such as parent size or user settings (accessi
 
 ---
 
-## 🆚 em vs rem
-
-```css
-html {
-  font-size: 16px;
-}
-
-.container {
-  font-size: 1.5rem; /* 24px (16 * 1.5) */
-  padding: 2em; /* 48px (24 * 2) */
-}
-```
-
-| Unit  | Depends on         | Good For                  |
-| ----- | ------------------ | ------------------------- |
-| `em`  | Parent's font-size | Component-local scaling   |
-| `rem` | Root font-size     | Consistent global scaling |
-
----
-
-### 🧠 When to Use What
-
-| Use Case                 | Recommended Unit  |
-| ------------------------ | ----------------- |
-| Font size                | `rem`, `em`       |
-| Spacing (margin/padding) | `rem`, `em`, `%`  |
-| Widths/heights           | `%`, `vw`, `vh`   |
-| Fixed icons, borders     | `px`              |
-| Responsive layout        | `vw`, `vh`, `rem` |
-
----
-
-### 💡 Bonus: Fluid Typography Trick
-
-```css
-html {
-  font-size: clamp(1rem, 2vw + 1rem, 2.5rem);
-}
-```
-
-This sets font size to:
-
-- Minimum: 1rem
-- Ideal: scales with 2vw + 1rem
-- Max: 2.5rem
-
-✅ Perfect for making fonts `responsive but bounded`.
-
----
-
-### 🧪 Real Example
-
-```css
-:root {
-  --spacing: 2rem;
-}
-
-.container {
-  padding: var(--spacing);
-  font-size: 1rem;
-  max-width: 90vw;
-}
-```
-
----
-
-## CSS Outline
-
-- Line drawn around an element, outside the border, without affecting layout.
-
-```css
-outline: 2px dotted red;
-```
-
----
-
 ## CSS Links
 
 - Style different link states.
@@ -845,13 +651,13 @@ The `position` property determines how an element is positioned in the document 
 
 ### 🧱 All Position Values
 
-| Value      | Description                                                                                                                                                  |
-| ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `static`   | Default. Element follows the normal flow of the document. `top`, `right`, etc. have no effect.                                                               |
-| `relative` | Positions the element relative to its normal position. Doesn't remove it from the document flow.                                                             |
-| `absolute` | Positions the element relative to the `nearest positioned ancestor` (`relative`, `absolute`, or `fixed`). If none, it's relative to the `<html>` (viewport). |
-| `fixed`    | Positions the element relative to the `viewport`. Stays fixed on scroll.                                                                                     |
-| `sticky`   | Acts like `relative` until a threshold is crossed (e.g., scroll), then becomes `fixed`. Requires `top`, `bottom`, etc.                                       |
+| Position   | Affects Layout | Relative to       | Removed from Flow | Scroll Affected | Use Case             |
+| ---------- | -------------- | ----------------- | ----------------- | --------------- | -------------------- |
+| `static`   | ✅             | Normal flow       | ❌                | ✅              | Default layout       |
+| `relative` | ✅ (minor)     | Self              | ❌                | ✅              | Nudging, anchor      |
+| `absolute` | ❌             | Positioned parent | ✅                | ✅              | Tooltips, modals     |
+| `fixed`    | ❌             | Viewport          | ✅                | ❌              | Navbars, FABs        |
+| `sticky`   | ✅ (initial)   | Self until sticky | ❌                | ⛔ (partially)  | Section headers, TOC |
 
 ---
 
@@ -949,20 +755,6 @@ div {
 
 ---
 
-### 📊 Visual Tree Representation
-
-```
-html
-└── body
-    └── div (static)
-        ├── span (relative)
-        │   └── tooltip (absolute → positioned to span)
-        └── header (sticky → scrolls till top)
-    └── nav (fixed → stays on screen)
-```
-
----
-
 ### 🧱 Stack Order & `z-index`
 
 - Only elements with `position` values of `relative`, `absolute`, `fixed`, or `sticky` create a `stacking context` with `z-index`.
@@ -984,77 +776,22 @@ html
 
 ---
 
-### 🪟 Real World Examples
-
-#### ✅ Tooltip:
-
-```css
-.tooltip-container {
-  position: relative;
-}
-
-.tooltip {
-  position: absolute;
-  top: 100%;
-  left: 0;
-}
-```
-
-#### ✅ Fixed Navbar:
-
-```css
-.navbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  z-index: 1000;
-}
-```
-
-#### ✅ Scroll Sticky Header:
-
-```css
-.header {
-  position: sticky;
-  top: 0;
-  background: white;
-  z-index: 1;
-}
-```
-
----
-
-### 🚫 Common Mistakes
-
-1. `Using `top`, `left`with`static`:` No effect.
-2. `No `positioned`parent for`absolute`:` It’ll attach to `<html>`, not expected container.
-3. ``sticky` not working?`
-
-   - Missing `top`, `bottom`, etc.
-   - Parent has `overflow: hidden/scroll/auto`.
-
----
-
-### 📌 Position Summary Table
-
-| Position   | Affects Layout | Relative to       | Removed from Flow | Scroll Affected | Use Case             |
-| ---------- | -------------- | ----------------- | ----------------- | --------------- | -------------------- |
-| `static`   | ✅             | Normal flow       | ❌                | ✅              | Default layout       |
-| `relative` | ✅ (minor)     | Self              | ❌                | ✅              | Nudging, anchor      |
-| `absolute` | ❌             | Positioned parent | ✅                | ✅              | Tooltips, modals     |
-| `fixed`    | ❌             | Viewport          | ✅                | ❌              | Navbars, FABs        |
-| `sticky`   | ✅ (initial)   | Self until sticky | ❌                | ⛔ (partially)  | Section headers, TOC |
-
----
-
 ## CSS Overflow
 
 - Specify how content that overflows the container is handled.
-- `Values:` `visible`, `hidden`, `scroll`, `auto`.
 
-```css
-overflow: auto;
-```
+| **Property**          | **Values**                                  | **Purpose / Behavior**                                        |
+| --------------------- | ------------------------------------------- | ------------------------------------------------------------- |
+| **`overflow`**        | `visible` (default)                         | Content **overflows** outside the container.                  |
+|                       | `hidden`                                    | **Clips** extra content (invisible).                          |
+|                       | `scroll`                                    | Always shows **scrollbars** (even if not needed).             |
+|                       | `auto`                                      | Shows **scrollbars only when needed**.                        |
+| **`overflow-x`**      | `visible` \| `hidden` \| `scroll` \| `auto` | Controls **horizontal overflow**.                             |
+| **`overflow-y`**      | `visible` \| `hidden` \| `scroll` \| `auto` | Controls **vertical overflow**.                               |
+| **`overflow-inline`** | `visible` \| `hidden` \| `scroll` \| `auto` | Controls **inline-axis overflow** (useful for writing modes). |
+| **`overflow-block`**  | `visible` \| `hidden` \| `scroll` \| `auto` | Controls **block-axis overflow**.                             |
+| **`text-overflow`**   | `clip` \| `ellipsis`                        | Defines **how clipped text is displayed** (e.g., `...`).      |
+| **`white-space`**     | `nowrap`                                    | Often used with `text-overflow` to **prevent wrapping**.      |
 
 ---
 
@@ -1572,275 +1309,88 @@ Before Flexbox/Grid, developers built:
 
 > Perfect for toolbars, cards, navbars, modals, and alignment tasks.
 
----
-
-### ✅ Flexbox Syntax
-
-```css
-.container {
-  display: flex; /* or inline-flex */
-}
-```
-
-Everything else (child alignment, spacing, etc.) is defined via `flex properties`.
+Here’s a **deep dive into Flexbox** — explained in a **tabular format** for clarity with **properties, examples, and purpose**.
 
 ---
 
-### 🧱 Flex Container vs Flex Items
+## **1. What is Flexbox?**
 
-- `Flex Container`: Element with `display: flex`
-- `Flex Items`: Direct children of the container
+Flexbox (**Flexible Box Layout**) is a **1D layout system** for arranging elements in **rows or columns**, allowing for **dynamic sizing, alignment, and spacing**.
 
-```html
-<div class="container">
-  <div>Item 1</div>
-  <div>Item 2</div>
-</div>
-```
+> **Best for:** Toolbars, navigation bars, cards, buttons, grids (1D).
 
 ---
 
-### 🔁 Flex Direction
+## **2. Flexbox Main Properties (Parent – `display: flex`)**
 
-```css
-flex-direction: row; /* default */
-flex-direction: row-reverse;
-flex-direction: column;
-flex-direction: column-reverse;
-```
-
-➡️ Defines the `main axis` (horizontal or vertical)
-➡️ The cross axis is `perpendicular` to the main axis
-
----
-
-### 🌐 Main Properties
-
-### 🔸 `justify-content` (main axis alignment)
-
-Aligns items `along the main axis`:
-
-```css
-justify-content: flex-start; /* default */
-justify-content: flex-end;
-justify-content: center;
-justify-content: space-between;
-justify-content: space-around;
-justify-content: space-evenly;
-```
+| **Property**          | **Values**                                                                                    | **Purpose**                                             |
+| --------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| **`display`**         | `flex` / `inline-flex`                                                                        | Turns an element into a **flex container**.             |
+| **`flex-direction`**  | `row` (default), `row-reverse`, `column`, `column-reverse`                                    | Defines **main axis direction**.                        |
+| **`flex-wrap`**       | `nowrap` (default), `wrap`, `wrap-reverse`                                                    | Controls **wrapping** of flex items.                    |
+| **`flex-flow`**       | `<direction> <wrap>`                                                                          | **Shorthand** for `flex-direction` + `flex-wrap`.       |
+| **`justify-content`** | `flex-start` (default), `flex-end`, `center`, `space-between`, `space-around`, `space-evenly` | Aligns items **along the main axis**.                   |
+| **`align-items`**     | `stretch` (default), `flex-start`, `flex-end`, `center`, `baseline`                           | Aligns items **along the cross-axis**.                  |
+| **`align-content`**   | `stretch`, `flex-start`, `flex-end`, `center`, `space-between`, `space-around`                | Aligns **multiple lines** of flex items (when wrapped). |
 
 ---
 
-### 🔸 `align-items` (cross axis alignment)
+## **3. Flexbox Item Properties (Children)**
 
-Aligns items `along the cross axis`:
-
-```css
-align-items: stretch; /* default */
-align-items: flex-start;
-align-items: flex-end;
-align-items: center;
-align-items: baseline;
-```
-
----
-
-### 🔸 `align-content` (multi-line cross axis alignment)
-
-Used `only when items wrap` to multiple lines:
-
-```css
-align-content: stretch; /* default */
-align-content: flex-start;
-align-content: flex-end;
-align-content: center;
-align-content: space-between;
-```
+| **Property**      | **Values**                                                        | **Purpose**                                                         |
+| ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
+| **`flex`**        | `flex: 1;` or `flex: 2 1 200px;`                                  | **Shorthand** for `flex-grow`, `flex-shrink`, `flex-basis`.         |
+| **`flex-grow`**   | `0` (default), `1`, `2`…                                          | Defines **how much space an item can grow** relative to others.     |
+| **`flex-shrink`** | `1` (default), `0`                                                | Defines **how much an item can shrink** when space is limited.      |
+| **`flex-basis`**  | `auto` (default), `200px`                                         | Sets the **initial size** of a flex item before distributing space. |
+| **`align-self`**  | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` | **Overrides `align-items`** for a single item.                      |
+| **`order`**       | `0` (default), `1`, `2`…                                          | Changes the **visual order** of items.                              |
 
 ---
 
-### 🔄 Wrapping Items
-
-```css
-flex-wrap: nowrap; /* default */
-flex-wrap: wrap;
-flex-wrap: wrap-reverse;
-```
-
-Can also be combined as shorthand:
-
-```css
-flex-flow: row wrap;
-```
-
----
-
-### 🔹 Flex Item Properties
-
-### 1. `flex-grow`
-
-```css
-.item {
-  flex-grow: 1; /* take up available space */
-}
-```
-
-Defines how much a flex item `grows` relative to others.
-
----
-
-### 2. `flex-shrink`
-
-```css
-.item {
-  flex-shrink: 1; /* default */
-}
-```
-
-Defines how much a flex item `shrinks` when needed.
-
----
-
-### 3. `flex-basis`
-
-```css
-.item {
-  flex-basis: 200px; /* preferred size before growing/shrinking */
-}
-```
-
----
-
-### 🔀 Shorthand
-
-```css
-.item {
-  flex: 1 0 200px;
-  /* grow shrink basis */
-}
-```
-
-Common shortcuts:
-
-- `flex: 1` → `1 1 0`
-- `flex: auto` → `1 1 auto`
-- `flex: none` → `0 0 auto`
-
----
-
-### 🔁 `align-self`
-
-Override `align-items` `per item`:
-
-```css
-.item {
-  align-self: center;
-}
-```
-
----
-
-### 📦 `order`
-
-Change the order of flex items (without changing DOM):
-
-```css
-.item {
-  order: 2; /* default is 0 */
-}
-```
-
----
-
-### 📏 Real-World Example
-
-```css
-.navbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-```
-
-```html
-<div class="navbar">
-  <div class="logo">Logo</div>
-  <ul class="menu">
-    <li>Home</li>
-    <li>About</li>
-  </ul>
-</div>
-```
-
----
-
-### 🪄 Responsive Flexbox Cards
-
-```css
-.card-container {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-}
-.card {
-  flex: 1 1 calc(33.33% - 1rem);
-}
-@media (max-width: 768px) {
-  .card {
-    flex: 1 1 100%;
-  }
-}
-```
-
----
-
-### 🎯 Common Layouts with Flexbox
-
-### ✅ Centering:
-
-```css
-.center {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-```
-
-### ✅ Equal width columns:
-
-```css
-.col {
-  flex: 1;
-}
-```
-
-### ✅ Responsive navbar:
-
-```css
-.nav {
-  display: flex;
-  justify-content: space-between;
-}
-```
-
----
-
-### 🧾 Flexbox Cheatsheet
+## **4. Example Flexbox Layout**
 
 ```css
 .container {
   display: flex;
-  flex-direction: row | column;
-  justify-content: center | space-between;
-  align-items: center | stretch;
+  flex-direction: row;
   flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
 }
-
 .item {
-  flex: 1 0 200px;
-  align-self: flex-end;
-  order: 2;
+  flex: 1 1 200px; /* grow, shrink, basis */
 }
+```
+
+---
+
+## **5. Visual Axis**
+
+- **Main Axis:** Controlled by `flex-direction`.
+- **Cross Axis:** Perpendicular to the main axis.
+
+Example:
+
+- `flex-direction: row` → Main axis = horizontal.
+- `flex-direction: column` → Main axis = vertical.
+
+---
+
+## **6. Common Flexbox Use Cases**
+
+- **Navigation bars** → `justify-content: space-between;`
+- **Cards/Grids** → `flex-wrap: wrap;` + `flex-basis`.
+- **Centering** → `justify-content: center; align-items: center;`.
+- **Reordering items** → `order`.
+
+---
+
+## **7. Quick Flex Shorthands**
+
+```css
+flex: 1; /* grow:1, shrink:1, basis:0 */
+flex: 0 0 100px; /* no grow, no shrink, fixed width */
 ```
 
 ## ![flex](./assets/flex.png)
@@ -1851,133 +1401,76 @@ Change the order of flex items (without changing DOM):
 
 `CSS Grid` is a 2-dimensional layout system in CSS that allows you to layout items in `rows and columns`, making it perfect for `complex responsive designs`.
 
-> Unlike Flexbox (1D), `Grid handles both rows & columns simultaneously`.
+- Unlike Flexbox (1D), `Grid handles both rows & columns simultaneously`.
+- **Best for:** **Page layouts, dashboards, galleries, and complex responsive designs.**
 
 ---
 
-### 🧱 Basic Terminology
+## **2. Grid Container Properties (Parent – `display: grid`)**
 
-| Term             | Meaning                                         |
-| ---------------- | ----------------------------------------------- |
-| `Grid Container` | Element with `display: grid` or `inline-grid`   |
-| `Grid Item`      | Direct children of the grid container           |
-| `Grid Line`      | Invisible lines dividing rows and columns       |
-| `Grid Track`     | Space between two lines (i.e., a column or row) |
-| `Grid Cell`      | Intersection of a row and column                |
-| `Grid Area`      | A rectangular space covering multiple cells     |
+| **Property**                               | **Values / Example**                                | **Purpose**                                            |
+| ------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------ |
+| **`display`**                              | `grid` / `inline-grid`                              | Turns an element into a **grid container**.            |
+| **`grid-template-columns`**                | `grid-template-columns: 200px 1fr 2fr;`             | Defines **column sizes** (fixed, fraction `fr`, auto). |
+| **`grid-template-rows`**                   | `grid-template-rows: 100px auto;`                   | Defines **row sizes**.                                 |
+| **`grid-template-areas`**                  | `"header header" "sidebar main"`                    | Defines **named layout areas**.                        |
+| **`grid-template`**                        | Combines **rows, columns, and areas** in shorthand. |                                                        |
+| **`column-gap` / `row-gap`**               | `column-gap: 20px; row-gap: 10px;`                  | Sets spacing between **columns/rows**.                 |
+| **`gap`**                                  | `gap: 20px;`                                        | Shorthand for row & column gap.                        |
+| **`justify-items`**                        | `start` / `end` / `center` / `stretch`              | Aligns **grid items horizontally** in their cells.     |
+| **`align-items`**                          | `start` / `end` / `center` / `stretch`              | Aligns **grid items vertically** in their cells.       |
+| **`justify-content`**                      | `start` / `end` / `center` / `space-between`        | Aligns **the entire grid horizontally**.               |
+| **`align-content`**                        | Same values as above                                | Aligns **the entire grid vertically**.                 |
+| **`grid-auto-rows` / `grid-auto-columns`** | `grid-auto-rows: 150px;`                            | Defines size for **implicitly created rows/columns**.  |
+| **`grid-auto-flow`**                       | `row` / `column` / `dense`                          | Controls **auto-placement of items**.                  |
 
 ---
 
-### 🚀 Getting Started
+## **3. Grid Item Properties (Children)**
+
+| **Property**       | **Example**                            | **Purpose**                         |
+| ------------------ | -------------------------------------- | ----------------------------------- |
+| **`grid-column`**  | `grid-column: 1 / 3;`                  | Spans **columns** (`start / end`).  |
+| **`grid-row`**     | `grid-row: 2 / 4;`                     | Spans **rows**.                     |
+| **`grid-area`**    | `grid-area: header;`                   | Places an item in a **named area**. |
+| **`justify-self`** | `start` / `end` / `center` / `stretch` | Aligns **one item horizontally**.   |
+| **`align-self`**   | Same values as above                   | Aligns **one item vertically**.     |
+
+---
+
+## **4. Example: Basic Grid Layout**
 
 ```css
 .container {
   display: grid;
-  grid-template-columns: 1fr 2fr;
-  grid-template-rows: auto auto;
+  grid-template-columns: 200px 1fr 1fr;
+  grid-template-rows: 100px auto 50px;
+  gap: 10px;
 }
-```
 
-```html
-<div class="container">
-  <div>1</div>
-  <div>2</div>
-  <div>3</div>
-</div>
-```
-
-- Creates a 2-column grid: 1 fraction and 2 fractions
-- Two auto rows (rows grow to fit content)
-
----
-
-### 🧮 Grid Units
-
-| Unit             | Description                                  |
-| ---------------- | -------------------------------------------- |
-| `fr`             | Fractional unit (portion of available space) |
-| `%`              | Percentage of parent                         |
-| `auto`           | Size based on content                        |
-| `px`, `em`, etc. | Fixed units                                  |
-
----
-
-### 📐 Defining Columns and Rows
-
-```css
-grid-template-columns: 200px 1fr 2fr;
-grid-template-rows: 100px auto;
-```
-
-- Explicitly defines number and size of columns/rows
-
----
-
-### 🔁 Repeat Notation
-
-```css
-grid-template-columns: repeat(3, 1fr);
-```
-
-➡️ Same as: `1fr 1fr 1fr`
-
----
-
-### 🔄 Auto-fill vs Auto-fit
-
-```css
-grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-```
-
-| Keyword     | Description                                               |
-| ----------- | --------------------------------------------------------- |
-| `auto-fill` | Fills row with as many columns as possible, even if empty |
-| `auto-fit`  | Collapses empty columns                                   |
-
-Use with `minmax()` for responsive grids.
-
----
-
-### 🧭 Placing Items
-
-#### Explicit Placement
-
-```css
-.item {
-  grid-column: 2 / 4;
-  grid-row: 1 / 3;
-}
-```
-
-- Spans from line 2 to line 4 (columns)
-- Spans from line 1 to line 3 (rows)
-
-#### Named Line Placement
-
-```css
-grid-template-columns: [start] 1fr [middle] 1fr [end];
-.item {
-  grid-column: start / middle;
-}
+.item1 {
+  grid-column: 1 / 4;
+} /* Full-width header */
+.item2 {
+  grid-row: 2 / 4;
+} /* Sidebar spanning 2 rows */
 ```
 
 ---
 
-### 🔲 Grid Areas
-
-#### Naming Areas
+## **5. Using `grid-template-areas`**
 
 ```css
 .container {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  grid-template-rows: 80px auto 50px;
   grid-template-areas:
     "header header"
     "sidebar main"
     "footer footer";
-  grid-template-columns: 200px 1fr;
+  gap: 10px;
 }
-```
-
-```css
 .header {
   grid-area: header;
 }
@@ -1992,111 +1485,44 @@ grid-template-columns: [start] 1fr [middle] 1fr [end];
 }
 ```
 
-🧠 Makes layout more readable.
+---
+
+## **6. Common Units in Grid**
+
+- **`px`** → Fixed size.
+- **`%`** → Relative to container.
+- **`fr`** → Fraction of available space.
+- **`auto`** → Size based on content.
+- **`minmax()`** → Dynamic sizing (e.g., `minmax(200px, 1fr)`).
+- **`repeat()`** → Repeat pattern (e.g., `repeat(3, 1fr)`).
 
 ---
 
-### 🔄 Implicit Grids
+## **7. Best Practices**
 
-When you don’t define enough rows/columns, the browser creates them automatically.
+- Use **`fr`** for flexible layouts.
+- Use **`minmax()`** for responsive grids.
+- Use **named areas** for semantic layouts.
+- Use **`auto-fit` / `auto-fill`** for dynamic grid columns.
+
+---
+
+### **Quick Auto-Fit Example (Responsive Cards)**
 
 ```css
-grid-auto-rows: 100px;
-```
-
----
-
-### 📦 Gap Between Items
-
-```css
-grid-gap: 20px;
-/* or */
-row-gap: 10px;
-column-gap: 20px;
-```
-
----
-
-### 🔤 Justify & Align
-
-| Property          | Controls                    | Values                                   |
-| ----------------- | --------------------------- | ---------------------------------------- |
-| `justify-items`   | Horizontal item alignment   | `start`, `center`, `end`, `stretch`      |
-| `align-items`     | Vertical item alignment     | Same                                     |
-| `justify-content` | Grid alignment (horizontal) | `start`, `center`, `space-between`, etc. |
-| `align-content`   | Grid alignment (vertical)   | Same                                     |
-
----
-
-### 🔀 Order and Layering
-
-```css
-.item {
-  z-index: 1; /* stack order */
-  order: 2; /* order (flex only) */
-}
-```
-
-You can visually move grid items using `grid-column` and `grid-row` without changing DOM order.
-
----
-
-### 💡 Real-World Example: Responsive Card Grid
-
-```css
-.card-grid {
+.container {
   display: grid;
-  gap: 1rem;
   grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-}
-```
-
-📱 Automatically adjusts cards per screen size.
-
----
-
-### 🔮 Advanced Features
-
-#### `subgrid` (Experimental but supported in Firefox)
-
-Allows nested grids to inherit row/column sizes from parent.
-
-#### Grid with media queries
-
-```css
-@media (max-width: 768px) {
-  .container {
-    grid-template-columns: 1fr;
-  }
+  gap: 20px;
 }
 ```
 
 ---
 
-### 📌 Grid vs Flexbox
+**Flexbox vs Grid:**
 
-| Feature        | Grid                          | Flexbox              |
-| -------------- | ----------------------------- | -------------------- |
-| Layout Type    | 2D (row + column)             | 1D (row `or` column) |
-| Alignment      | Both axes simultaneously      | One axis at a time   |
-| Item Placement | Precise (line numbers, areas) | Order-based          |
-| Best For       | Full-page/layout design       | Toolbar, nav, forms  |
-
-Use `Grid for layout`, `Flexbox for components`.
-
----
-
-## ✅ Cheatsheet
-
-```css
-display: grid;
-grid-template-columns: repeat(3, 1fr);
-grid-template-rows: auto;
-grid-gap: 20px;
-grid-column: 2 / 4;
-grid-row: 1 / 2;
-grid-area: name;
-```
+- **Flexbox:** 1D layout (row _or_ column).
+- **Grid:** 2D layout (row **and** column).
 
 ## ![grid](./assets/grid.png)
 
