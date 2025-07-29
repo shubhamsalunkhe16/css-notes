@@ -819,7 +819,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 
 ---
 
-## CSS Grid?
+## CSS Grid
 
 `CSS Grid` is a 2-dimensional layout system in CSS that allows you to layout items in `rows and columns`, making it perfect for `complex responsive designs`.
 
@@ -934,7 +934,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 
 ---
 
-## CSS Functions?
+## CSS Functions
 
 `CSS Functions` are expressions that return a value, often used inside property values. They can perform `calculations`, `color manipulations`, `transformations`, and more.
 
