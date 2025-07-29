@@ -61,20 +61,6 @@ p {
 | **Universal selector**  | `*`                        | **0**                 | Has **no effect** on specificity.                                                                   |
 | **Combinators**         | `div > p`, `ul li`         | **0**                 | `>`, `+`, `~`, whitespace do not add to specificity.                                                |
 
-### **How Specificity is Calculated**
-
-Think of it as a **4-part number:**
-
-```
-Inline Styles : IDs : Classes/Attributes/Pseudo-classes : Elements/Pseudo-elements
-```
-
-For example:
-
-- `#header .nav li` → `0,1,1,1` → **100 + 10 + 1 = 111**
-- `div p` → `0,0,0,2` → **2**
-- `style="color:red;"` → `1,0,0,0` → **1000**
-
 ### **Important Notes**
 
 - **Inline styles** override everything except `!important`.
@@ -83,7 +69,7 @@ For example:
 
 ## CSS Pseudo-Class
 
-- targets an element based on its `state, position, or characteristics` — but `without modifying the DOM`.
+- `targets an element` based on its `state, position, or characteristics` — but `without modifying the DOM`.
 
 **Syntax:**
 
@@ -162,7 +148,7 @@ selector:pseudo-class {
 
 ## CSS Pseudo-Element?
 
-- targets `a specific part` of an element — like the first letter, line, or adds content `before/after` it.
+- `targets a specific part of an element` — like the first letter, line, or adds content `before/after` it.
 - e.g., the first letter, before/after content, etc.
 
 **Syntax:**
@@ -177,19 +163,19 @@ selector::pseudo-element {
 
 ## **List of Common Pseudo-Elements**
 
-| **Pseudo-Element**       | **Example**                   | **Purpose**                                      |
-| ------------------------ | ----------------------------- | ------------------------------------------------ |
-| `::before`               | `p::before`                   | Inserts content **before** an element’s content. |
-| `::after`                | `p::after`                    | Inserts content **after** an element’s content.  |
-| `::first-letter`         | `p::first-letter`             | Styles the **first letter** of text.             |
-| `::first-line`           | `p::first-line`               | Styles the **first line** of text.               |
-| `::selection`            | `p::selection`                | Styles text **highlighted by the user**.         |
-| `::placeholder`          | `input::placeholder`          | Styles the **placeholder text** in inputs.       |
-| `::marker`               | `li::marker`                  | Styles **list item markers** (e.g., bullets).    |
-| `::backdrop`             | `dialog::backdrop`            | Styles the **backdrop** of a `<dialog>` element. |
-| `::file-selector-button` | `input::file-selector-button` | Styles the **file upload button**.               |
-| `::cue`                  | `video::cue`                  | Styles **WebVTT captions** in media elements.    |
-| `::part()`               | `my-element::part(header)`    | Styles **parts of a shadow DOM** component.      |
+| **Pseudo-Element**       | **Example**                   | **Purpose**                                    |
+| ------------------------ | ----------------------------- | ---------------------------------------------- |
+| `::before`               | `p::before`                   | `Inserts content before` an element’s content. |
+| `::after`                | `p::after`                    | `Inserts content after` an element’s content.  |
+| `::first-letter`         | `p::first-letter`             | Styles the `first letter` of text.             |
+| `::first-line`           | `p::first-line`               | Styles the `first line` of text.               |
+| `::selection`            | `p::selection`                | Styles text `highlighted by the user`.         |
+| `::placeholder`          | `input::placeholder`          | Styles the `placeholder text` in inputs.       |
+| `::marker`               | `li::marker`                  | Styles `list item markers` (e.g., bullets).    |
+| `::backdrop`             | `dialog::backdrop`            | Styles the `backdrop` of a `<dialog>` element. |
+| `::file-selector-button` | `input::file-selector-button` | Styles the `file upload button`.               |
+| `::cue`                  | `video::cue`                  | Styles `WebVTT captions` in media elements.    |
+| `::part()`               | `my-element::part(header)`    | Styles `parts of a shadow DOM` component.      |
 
 ### **`::before` & `::after`**
 
@@ -211,23 +197,19 @@ button::after {
 
 | **Aspect**                                          | **Pseudo-Class**                                                                     | **Pseudo-Element**                                                                                             |
 | --------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- |
-| **Definition**                                      | Represents a **state** or **condition** of an element.                               | Represents a **part of an element** or **generated content**.                                                  |
+| **Definition**                                      | Represents a `state` or `condition` of an element.                                   | Represents a `part of an element` or `generated content`.                                                      |
 | **Syntax**                                          | Uses a **single colon** `:`. <br>_Example:_ `a:hover`                                | Uses **double colons** `::`. <br>_Example:_ `p::before`                                                        |
-| **Purpose**                                         | Used to style elements **based on interaction, position, or logical conditions**.    | Used to **style specific parts of an element** or **insert virtual content**.                                  |
+| **Purpose**                                         | Used to style elements `based on interaction, position, or logical conditions`.      | Used to `style specific parts of an element` or `insert virtual content`.                                      |
 | **Examples**                                        | `:hover`, `:first-child`, `:not()`, `:focus`                                         | `::before`, `::after`, `::first-letter`, `::placeholder`                                                       |
 | **Does it create new content?**                     | **No** – It only changes styles based on state.                                      | **Yes** – Can **generate content** using `content:` (e.g., `::before`, `::after`).                             |
-| **Affects DOM?**                                    | **No** – Does not alter the DOM structure.                                           | **No** – Doesn't actually add nodes, but visually affects content.                                             |
 | **Can it style part of an element’s text/content?** | **No** – Targets whole elements only.                                                | **Yes** – Can target **specific portions** (first letter, first line, list markers).                           |
-| **Specificity**                                     | Acts like **class selectors** (specificity: 0,1,0).                                  | Acts like **element selectors** (specificity: 0,0,0,1).                                                        |
-| **Interactivity**                                   | Often used for **user interactions** (hover, focus, active).                         | Mostly **decorative/content-related** styling.                                                                 |
-| **Introduced in**                                   | **CSS1/2** (and newer pseudo-classes in CSS3).                                       | **CSS2** (with more added in CSS3).                                                                            |
 | **Common Use Cases**                                | - Highlight links on `:hover`<br>- Style first/last child<br>- Exclude with `:not()` | - Add icons/text using `::before`/`::after`<br>- Style first letters<br>- Customize placeholder & list markers |
 
 ---
 
 ## CSS Colors
 
-- Define the color of elements using different formats.
+- `Define the color of elements` using different formats.
 - Types of CSS Color Values
 
 | **Type**          | **Example**                   | **Range / Notes**                                           | **Use Case**                           |
@@ -246,7 +228,7 @@ button::after {
 
 ## CSS Background
 
-- Set background styles for elements.
+- Set `background styles for elements`
 - CSS Background Properties Table
 
 | **Property**                              | **Example**                                                 | **Purpose**                                                                                                      |
@@ -296,7 +278,7 @@ button::after {
 
 ## Text CSS
 
-- Style the text within elements.
+- `Style the text within elements`
 
 | **Property**                    | **Example**                       | **Purpose / When to Use**                                                                   |
 | ------------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------- |
@@ -323,7 +305,7 @@ button::after {
 
 ## Fonts CSS
 
-- Set the font styles for text.
+- `Set the font styles for text`
 
 | **Property**                | **Example**                                 | **Purpose / When to Use**                                        |
 | --------------------------- | ------------------------------------------- | ---------------------------------------------------------------- |
@@ -345,7 +327,7 @@ button::after {
 
 ## Height and Width CSS
 
-- Define dimensions of elements.
+- `Define dimensions of elements`
 
 | **Property**       | **Example**               | **Purpose / When to Use**                                                                                            |
 | ------------------ | ------------------------- | -------------------------------------------------------------------------------------------------------------------- |
@@ -360,7 +342,7 @@ button::after {
 
 ---
 
-## Box Model?
+## Box Model
 
 - Every HTML element is treated as a `box`, and the `CSS Box Model` defines how that box is structured in terms of:
 
@@ -380,47 +362,19 @@ button::after {
 
 ### 🧮 Box Model Properties
 
-| **Layer**   | **Purpose**                                                 | **Example**          |
-| ----------- | ----------------------------------------------------------- | -------------------- |
-| **Content** | The actual content area (text, images).                     | `width`, `height`    |
-| **Padding** | Creates space **inside the box**, between content & border. | `padding: 10px;`     |
-| **Border**  | The visible line surrounding padding & content.             | `border: 2px solid;` |
-| **Margin**  | Creates **space between elements**.                         | `margin: 20px;`      |
+| **Layer**   | **Purpose**                                               | **Example**          |
+| ----------- | --------------------------------------------------------- | -------------------- |
+| **Content** | The `actual content area` (text, images).                 | `width`, `height`    |
+| **Padding** | Creates space `inside the box`, between content & border. | `padding: 10px;`     |
+| **Border**  | The `visible line surrounding padding & content`.         | `border: 2px solid;` |
+| **Margin**  | Creates `space between elements`.                         | `margin: 20px;`      |
 
----
+### `box-sizing` CSS property
 
-### 📘 Default `box-sizing`
-
-### 🔹 `box-sizing: content-box` (default)
-
-```css
-width: 200px;
-padding: 20px;
-border: 10px;
-```
-
-👉 Actual rendered width:
-
-```
-200 (content) + 40 (padding) + 20 (border) = 260px
-```
-
----
-
-### 🔹 `box-sizing: border-box` ✅ (recommended)
-
-> Total size = width (including padding + border)
-
-```css
-box-sizing: border-box;
-width: 200px;
-padding: 20px;
-border: 10px;
-```
-
-👉 Total width remains `200px` — content is auto-adjusted.
-
----
+| **Property** | **Value**               | **Description**                                                                                             | **Width & Height Includes** | **Example**                                                               |
+| ------------ | ----------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------- | ------------------------------------------------------------------------- |
+| `box-sizing` | `content-box` (default) | The default value where only the content is included in the width and height. Padding & border are `extra`. | Content only                | Width: 200px → Final width = 200px (content) + padding + border           |
+| `box-sizing` | `border-box`            | Width and height include `content, padding, and border`. Useful for predictable layouts.                    | Content + Padding + Border  | Width: 200px → Final width = 200px total, internally adjusts content size |
 
 ### 🛠️ Universal Reset
 
@@ -436,103 +390,16 @@ To avoid box model inconsistencies across browsers:
 
 ---
 
-### 📏 Example
-
-```css
-.box {
-  width: 300px;
-  padding: 20px;
-  border: 5px solid black;
-  margin: 10px;
-}
-```
-
-- `Content width` = 300px (default if `content-box`)
-- `Total width` = 300 + 40 (padding) + 10 (border) = 350px
-
----
-
-### ✅ Best Practices
-
-- Always use `box-sizing: border-box;` to prevent layout surprises.
-- Use `padding` for spacing `inside` an element.
-- Use `margin` for spacing `between` elements.
-- Set `display: inline-block` or `flex` to control box flow.
-
----
-
 ## CSS Margin Collapsing
 
-- is a CSS behavior where `vertical margins of adjacent elements` combine into `a single margin`, rather than adding up.
+- Margin collapsing is a behavior in CSS where vertical margins of certain elements combine (collapse) into a single margin, rather than adding together.
 
----
-
-### 📌 When Does Margin Collapsing Happen?
-
-#### ✅ 1. `Between vertical siblings`
-
-```html
-<div class="box1"></div>
-<div class="box2"></div>
-```
-
-```css
-.box1 {
-  margin-bottom: 20px;
-}
-.box2 {
-  margin-top: 30px;
-}
-```
-
-➡️ Result: The space between the two elements is `30px`, `not 50px`.
-Because `20px` and `30px` collapse to `the larger value`.
-
----
-
-#### ✅ 2. `Between parent and first/last child`
-
-```html
-<div class="parent">
-  <div class="child"></div>
-</div>
-```
-
-```css
-.parent {
-  margin-top: 50px;
-}
-.child {
-  margin-top: 30px;
-}
-```
-
-➡️ Result: The `30px` top margin of the child `collapses` with the parent’s margin. The total top space is `max(30, 50) = 50px`, not 80px.
-
----
-
-#### ✅ 3. `Empty elements with no padding/border/content`
-
-```html
-<div class="empty"></div>
-```
-
-```css
-.empty {
-  margin-top: 20px;
-  margin-bottom: 30px;
-}
-```
-
-➡️ If this element has no `padding`, `border`, or `content`, the `top and bottom margins collapse` into `30px`, the larger one.
-
----
-
-### 🧪 Margin Collapsing _Only_ Applies To:
-
-- `Vertical margins`
-- `Block-level elements` (like `div`, `p`, `section`, etc.)
-- Elements in the `normal document flow` (not floated or absolutely positioned)
+| **Scenario**                     | **Description**                                                            | **Example / Notes**                                                                                      |
+| -------------------------------- | -------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- |
+| **Adjacent vertical margins**    | When two block elements' top and bottom margins meet (stacked vertically). | A `<div>` with `margin-bottom: 20px` followed by a `<p>` with `margin-top: 30px` → Total margin = `30px` |
+| **Parent and first/last child**  | Margin between parent and first/last child block element.                  | If parent has no padding/border/overflow set, margins may collapse.                                      |
+| **Empty block elements**         | An element with no content, padding, border, or height.                    | The element's vertical margins collapse with its parent.                                                 |
+| **Nested elements with margins** | Margin between nested child and parent (top or bottom) may collapse.       | Parent and child margin collapse only if no border/padding/overflow/inline content                       |
 
 ---
 
@@ -568,8 +435,6 @@ These units are `not affected` by parent or screen size. They're best for print 
 | `mm` | millimeters | Physical mm          | Also rare in web design.                                    |
 
 🧠 `Use Case for `px`:` UI layout spacing, borders, font-size (when you need precision).
-
----
 
 ### 🔹 2. `Relative Units` (Flexible / Responsive)
 
@@ -651,107 +516,13 @@ The `position` property determines how an element is positioned in the document 
 
 ### 🧱 All Position Values
 
-| Position   | Affects Layout | Relative to       | Removed from Flow | Scroll Affected | Use Case             |
-| ---------- | -------------- | ----------------- | ----------------- | --------------- | -------------------- |
-| `static`   | ✅             | Normal flow       | ❌                | ✅              | Default layout       |
-| `relative` | ✅ (minor)     | Self              | ❌                | ✅              | Nudging, anchor      |
-| `absolute` | ❌             | Positioned parent | ✅                | ✅              | Tooltips, modals     |
-| `fixed`    | ❌             | Viewport          | ✅                | ❌              | Navbars, FABs        |
-| `sticky`   | ✅ (initial)   | Self until sticky | ❌                | ⛔ (partially)  | Section headers, TOC |
-
----
-
-### ⚙️ How Each Works (with Real-World Use)
-
----
-
-#### 1. ✅ `static` (Default)
-
-```css
-div {
-  position: static;
-}
-```
-
-- No special positioning.
-- Can’t use `top`, `left`, etc.
-- Follows normal document flow.
-
-🧠 `Use case:` Standard content like paragraphs, headings.
-
----
-
-#### 2. 🔁 `relative`
-
-```css
-div {
-  position: relative;
-  top: 10px;
-  left: 20px;
-}
-```
-
-- Shifts `relative to its original position`.
-- Does `not` affect surrounding elements' layout.
-
-🧠 `Use case:` Add small tweaks, tooltip triggers, or set up a context for `absolute` children.
-
----
-
-#### 3. 🎯 `absolute`
-
-```css
-.container {
-  position: relative;
-}
-
-.box {
-  position: absolute;
-  top: 0;
-  right: 0;
-}
-```
-
-- Out of document flow.
-- Positioned relative to the `nearest positioned ancestor`.
-- If no ancestor is positioned, it uses the `html` element.
-
-🧠 `Use case:` Dropdowns, tooltips, modals, floating icons.
-
----
-
-#### 4. 📌 `fixed`
-
-```css
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-}
-```
-
-- Fixed to `viewport`.
-- Does not move on scroll.
-
-🧠 `Use case:` Sticky headers, floating action buttons, side navs.
-
----
-
-#### 5. 📍 `sticky`
-
-```css
-.sidebar {
-  position: sticky;
-  top: 0;
-}
-```
-
-- Hybrid of `relative` + `fixed`.
-- Scrolls with content until a `threshold` (e.g., `top: 0`) is reached.
-- Works only inside a scrollable container.
-
-🧠 `Use case:` Sticky headings in tables, scrollspy sections, persistent navs.
+| **Value**  | **Description**                                                                                   | **How It’s Used**                                                                      | **Example**                                                                   |
+| ---------- | ------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| `static`   | `Default positioning`. Elements flow normally in the document.                                    | Does not respond to `top`, `right`, `bottom`, or `left` properties.                    | `div { position: static; }` (default — no special positioning)                |
+| `relative` | Offsets the element `relative to its normal position`.                                            | Can use `top`, `left`, `bottom`, `right` to shift. `Space remains reserved`.           | `div { position: relative; top: 10px; left: 20px; }`                          |
+| `absolute` | `Removes the element` from the normal flow. Positioned relative to nearest `non-static` ancestor. | Takes reference from nearest parent with `position: relative`, `absolute`, or `fixed`. | `div { position: absolute; top: 10px; left: 20px; }` inside a relative parent |
+| `fixed`    | `Fixed to the viewport`. Doesn't move on scroll.                                                  | Always relative to browser window. Useful for sticky headers, modals, etc.             | `div { position: fixed; bottom: 0; right: 0; }` (e.g., fixed footer button)   |
+| `sticky`   | Behaves like `relative` until a threshold is met, then like `fixed`.                              | Needs `top`, `left`, etc. and a scrollable container.                                  | `div { position: sticky; top: 0; }` (e.g., sticky navbar on scroll)           |
 
 ---
 
@@ -762,7 +533,7 @@ div {
 
 ```css
 .box1 {
-  position: absolute;
+  position: relative;
   z-index: 10;
 }
 
@@ -801,8 +572,6 @@ Media Queries let you apply CSS `only when specific conditions` (like screen wid
 
 > `"If the screen is less than 768px wide, apply these styles."`
 
----
-
 ### 🔤 Basic Syntax
 
 ```css
@@ -821,8 +590,6 @@ Media Queries let you apply CSS `only when specific conditions` (like screen wid
 }
 ```
 
----
-
 ### 📦 Media Types
 
 | Media Type | Description                     |
@@ -832,177 +599,21 @@ Media Queries let you apply CSS `only when specific conditions` (like screen wid
 | `print`    | Print preview or printed docs   |
 | `speech`   | Screen readers                  |
 
----
+### Conditions
 
-### 📐 Common Media Features
-
-| Feature            | Description                | Example                  |
-| ------------------ | -------------------------- | ------------------------ |
-| `width` / `height` | Viewport width/height      | `max-width: 768px`       |
-| `orientation`      | Landscape or portrait      | `orientation: portrait`  |
-| `aspect-ratio`     | Ratio of width to height   | `aspect-ratio: 16/9`     |
-| `resolution`       | DPI or DPCM of screen      | `min-resolution: 300dpi` |
-| `hover`            | Whether hover is supported | `hover: none`            |
-| `pointer`          | Precision of input pointer | `pointer: coarse`        |
-
----
-
-### 🔁 Min vs Max
-
-| Property    | Meaning                                 |
-| ----------- | --------------------------------------- |
-| `min-width` | Apply if screen is `at least` this wide |
-| `max-width` | Apply if screen is `at most` this wide  |
-
-### 📌 Rule of Thumb:
-
-- Use `min-width` for `mobile-first` design
-- Use `max-width` for `desktop-first`
-
----
-
-### 📱 Common Breakpoints
-
-| Device       | Width Range      |
-| ------------ | ---------------- |
-| Mobile       | 320px – 480px    |
-| Tablet       | 481px – 768px    |
-| Small Laptop | 769px – 1024px   |
-| Desktop      | 1025px and above |
-
-```css
-/* Mobile-first approach */
-@media (min-width: 480px) {
-  ...;
-}
-@media (min-width: 768px) {
-  ...;
-}
-@media (min-width: 1024px) {
-  ...;
-}
-```
-
----
-
-### 💡 Media Query Examples
-
-### ✅ Responsive Layout
-
-```css
-.container {
-  display: flex;
-  flex-direction: column;
-}
-@media (min-width: 768px) {
-  .container {
-    flex-direction: row;
-  }
-}
-```
-
-### ✅ Hide an element on mobile
-
-```css
-@media (max-width: 600px) {
-  .sidebar {
-    display: none;
-  }
-}
-```
-
-### ✅ Print Styles
-
-```css
-@media print {
-  body {
-    font-size: 12pt;
-    color: black;
-  }
-}
-```
-
----
-
-### 🔀 Combining Conditions
-
-```css
-@media screen and (min-width: 768px) and (orientation: landscape) {
-  /* Apply if width ≥ 768px AND landscape */
-}
-```
-
----
-
-### ⚡ Advanced: Media Query Ranges (CSS Level 4+)
-
-```css
-@media (400px <= width <= 768px) {
-  /* Apply styles between 400px and 768px */
-}
-```
-
-Note: Not supported in all browsers yet. Use with caution.
-
----
-
-### 📌 Best Practices
-
-1. ✅ `Mobile-first approach`: Start with base styles for mobile, use `min-width` to enhance for bigger screens.
-2. ✅ `Group breakpoints logically` (desktop/tablet/mobile).
-3. ❌ Avoid too many breakpoints. Use `fluid units (%, rem, vw)` where possible.
-4. ✅ Keep breakpoints consistent across your app.
-
----
-
-### 📁 Organizing Media Queries
-
-### Option 1: Inline (with components)
-
-```css
-.card {
-  padding: 1rem;
-}
-@media (min-width: 768px) {
-  .card {
-    padding: 2rem;
-  }
-}
-```
-
-### Option 2: Centralized in a file
-
-```css
-/* styles.css */
-@media (min-width: 768px) {
-  /* All tablet+ overrides */
-}
-```
-
----
-
-### 🧪 Real Example: Fluid Grid
-
-```css
-.grid {
-  display: grid;
-  grid-template-columns: 1fr;
-}
-@media (min-width: 768px) {
-  .grid {
-    grid-template-columns: 1fr 1fr;
-  }
-}
-@media (min-width: 1024px) {
-  .grid {
-    grid-template-columns: 1fr 1fr 1fr;
-  }
-}
-```
-
----
-
-### 🧾 Media Query Cheatsheet
+| **Media Type/Feature**   | **Description**                                              | **Example**                                                                         |
+| ------------------------ | ------------------------------------------------------------ | ----------------------------------------------------------------------------------- |
+| `min-width`              | Applies styles when **viewport width is ≥ value**            | `@media (min-width: 768px) { body { background: lightblue; } }`                     |
+| `max-width`              | Applies styles when **viewport width is ≤ value**            | `@media (max-width: 600px) { h1 { font-size: 20px; } }`                             |
+| `min-height`             | Applies styles when **viewport height is ≥ value**           | `@media (min-height: 800px) { .hero { padding: 100px; } }`                          |
+| `max-height`             | Applies styles when **viewport height is ≤ value**           | `@media (max-height: 500px) { .menu { display: none; } }`                           |
+| `orientation`            | Detects **device orientation** (landscape or portrait)       | `@media (orientation: landscape) { .video { width: 100%; } }`                       |
+| `resolution`             | Detects screen **pixel density** (useful for retina screens) | `@media (min-resolution: 192dpi) { .logo { background-image: url(logo@2x.png); } }` |
+| `aspect-ratio`           | Detects ratio of width to height                             | `@media (aspect-ratio: 16/9) { .video { height: auto; } }`                          |
+| `hover`                  | Detects if device **supports hover**                         | `@media (hover: hover) { button:hover { background: blue; } }`                      |
+| `pointer`                | Detects type of input device (fine, coarse, none)            | `@media (pointer: coarse) { .btn { padding: 20px; } }`                              |
+| `prefers-color-scheme`   | Detects user’s **light/dark mode** preference                | `@media (prefers-color-scheme: dark) { body { background: #111; color: #eee; } }`   |
+| `prefers-reduced-motion` | Detects user preference for **reduced animations**           | `@media (prefers-reduced-motion: reduce) { * { animation: none !important; } }`     |
 
 ```css
 /* Portrait phones */
@@ -1120,43 +731,6 @@ transition: property duration timing-function delay;
 
 ---
 
-### 💡 Tips
-
-- Use `transform` and `opacity` for performance-friendly animations.
-- Avoid animating `width`, `height`, `top`, `left` if possible (they trigger layout recalculations).
-- `cubic-bezier()` gives you custom timing for advanced easing.
-
----
-
-### 🧪 Real-Life Example: Button with Bounce on Hover
-
-```css
-@keyframes bounceIn {
-  0% {
-    transform: scale(0.9);
-    opacity: 0;
-  }
-  60% {
-    transform: scale(1.1);
-    opacity: 1;
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-
-.button {
-  animation: bounceIn 0.5s ease;
-  transition: transform 0.3s;
-}
-
-.button:hover {
-  transform: scale(1.1);
-}
-```
-
----
-
 ## CSS Display
 
 The `display` property defines how an element is `visually formatted` in the document flow.
@@ -1173,155 +747,13 @@ The `display` property defines how an element is `visually formatted` in the doc
 
 ---
 
-### ✅ A. `Inline and Inline-block`
+### CSS Flexbox
 
-```css
-.item {
-  display: inline-block;
-  width: 100px;
-  height: 100px;
-}
-```
+Flexbox (`Flexible Box Layout`) is a `1D layout system` for arranging elements in `rows or columns`, allowing for `dynamic sizing, alignment, and spacing`.
 
-- Elements flow horizontally
-- You can set dimensions
-- Respect white space between elements (use `font-size: 0` on parent to remove gaps)
+> `Best for:` Toolbars, navigation bars, cards, buttons, grids (1D).
 
----
-
-### ✅ B. `Float-based Layouts`
-
-```css
-.left {
-  float: left;
-  width: 50%;
-}
-.right {
-  float: right;
-  width: 50%;
-}
-```
-
-- Elements are pulled left/right
-- Content flows around them
-- Requires `clearfix` technique to contain floated children:
-
-```css
-.clearfix::after {
-  content: "";
-  display: table;
-  clear: both;
-}
-```
-
-⚠️ Can cause layout bugs — not responsive-friendly.
-
----
-
-### ✅ C. `Table Display`
-
-```css
-.container {
-  display: table;
-  width: 100%;
-}
-.row {
-  display: table-row;
-}
-.cell {
-  display: table-cell;
-  padding: 10px;
-}
-```
-
-- Mimics HTML tables
-- Used for vertical centering and fixed-width columns
-
----
-
-### Margin Auto for Centering
-
-```css
-.box {
-  width: 200px;
-  margin: 0 auto;
-}
-```
-
-✅ Horizontally centers block elements with fixed width.
-
----
-
-### Vertical Alignment (Legacy)
-
-Inside `inline-block` or `table-cell`:
-
-```css
-.parent {
-  display: table-cell;
-  vertical-align: middle;
-}
-```
-
----
-
-### Overflow and Visibility
-
-- `overflow: hidden | scroll | auto`
-- `visibility: hidden` vs `display: none`
-
-```css
-.box {
-  overflow: auto;
-  max-height: 300px;
-}
-```
-
----
-
-### 🧠 Summary Table
-
-| Feature           | Techniques                                |
-| ----------------- | ----------------------------------------- |
-| Horizontal layout | `inline-block`, `float`                   |
-| Vertical layout   | `table-cell`, `position`                  |
-| Centering         | `margin: auto`, `text-align`, `transform` |
-| Hiding            | `display: none`, `visibility: hidden`     |
-| Overflows         | `overflow` property                       |
-| Custom layout     | `position: absolute` or `relative`        |
-
----
-
-### 🧪 Real-Life Use
-
-Before Flexbox/Grid, developers built:
-
-- 3-column layouts using floats
-- Centered boxes using `margin: auto`
-- Sticky headers using `position: sticky`
-- Menus with `inline-block`
-
----
-
-### CSS Flexbox?
-
-`Flexbox` (Flexible Box Layout) is a `1-dimensional layout model` in CSS that lets you design layouts `along a single axis`: either `row (horizontal)` or `column (vertical)`.
-
-> Perfect for toolbars, cards, navbars, modals, and alignment tasks.
-
-Here’s a **deep dive into Flexbox** — explained in a **tabular format** for clarity with **properties, examples, and purpose**.
-
----
-
-## **1. What is Flexbox?**
-
-Flexbox (**Flexible Box Layout**) is a **1D layout system** for arranging elements in **rows or columns**, allowing for **dynamic sizing, alignment, and spacing**.
-
-> **Best for:** Toolbars, navigation bars, cards, buttons, grids (1D).
-
----
-
-## **2. Flexbox Main Properties (Parent – `display: flex`)**
+## **Flexbox Main Properties (Parent – `display: flex`)**
 
 | **Property**          | **Values**                                                                                    | **Purpose**                                             |
 | --------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
@@ -1333,9 +765,7 @@ Flexbox (**Flexible Box Layout**) is a **1D layout system** for arranging elemen
 | **`align-items`**     | `stretch` (default), `flex-start`, `flex-end`, `center`, `baseline`                           | Aligns items **along the cross-axis**.                  |
 | **`align-content`**   | `stretch`, `flex-start`, `flex-end`, `center`, `space-between`, `space-around`                | Aligns **multiple lines** of flex items (when wrapped). |
 
----
-
-## **3. Flexbox Item Properties (Children)**
+## **Flexbox Item Properties (Children)**
 
 | **Property**      | **Values**                                                        | **Purpose**                                                         |
 | ----------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------- |
@@ -1346,9 +776,7 @@ Flexbox (**Flexible Box Layout**) is a **1D layout system** for arranging elemen
 | **`align-self`**  | `auto`, `flex-start`, `flex-end`, `center`, `baseline`, `stretch` | **Overrides `align-items`** for a single item.                      |
 | **`order`**       | `0` (default), `1`, `2`…                                          | Changes the **visual order** of items.                              |
 
----
-
-## **4. Example Flexbox Layout**
+## **Example Flexbox Layout**
 
 ```css
 .container {
@@ -1363,9 +791,7 @@ Flexbox (**Flexible Box Layout**) is a **1D layout system** for arranging elemen
 }
 ```
 
----
-
-## **5. Visual Axis**
+## **Visual Axis**
 
 - **Main Axis:** Controlled by `flex-direction`.
 - **Cross Axis:** Perpendicular to the main axis.
@@ -1375,18 +801,14 @@ Example:
 - `flex-direction: row` → Main axis = horizontal.
 - `flex-direction: column` → Main axis = vertical.
 
----
-
-## **6. Common Flexbox Use Cases**
+## **Common Flexbox Use Cases**
 
 - **Navigation bars** → `justify-content: space-between;`
 - **Cards/Grids** → `flex-wrap: wrap;` + `flex-basis`.
 - **Centering** → `justify-content: center; align-items: center;`.
 - **Reordering items** → `order`.
 
----
-
-## **7. Quick Flex Shorthands**
+## **Quick Flex Shorthands**
 
 ```css
 flex: 1; /* grow:1, shrink:1, basis:0 */
@@ -1404,9 +826,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 - Unlike Flexbox (1D), `Grid handles both rows & columns simultaneously`.
 - **Best for:** **Page layouts, dashboards, galleries, and complex responsive designs.**
 
----
-
-## **2. Grid Container Properties (Parent – `display: grid`)**
+## **Grid Container Properties (Parent – `display: grid`)**
 
 | **Property**                               | **Values / Example**                                | **Purpose**                                            |
 | ------------------------------------------ | --------------------------------------------------- | ------------------------------------------------------ |
@@ -1424,9 +844,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 | **`grid-auto-rows` / `grid-auto-columns`** | `grid-auto-rows: 150px;`                            | Defines size for **implicitly created rows/columns**.  |
 | **`grid-auto-flow`**                       | `row` / `column` / `dense`                          | Controls **auto-placement of items**.                  |
 
----
-
-## **3. Grid Item Properties (Children)**
+## **Grid Item Properties (Children)**
 
 | **Property**       | **Example**                            | **Purpose**                         |
 | ------------------ | -------------------------------------- | ----------------------------------- |
@@ -1436,9 +854,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 | **`justify-self`** | `start` / `end` / `center` / `stretch` | Aligns **one item horizontally**.   |
 | **`align-self`**   | Same values as above                   | Aligns **one item vertically**.     |
 
----
-
-## **4. Example: Basic Grid Layout**
+## **Example: Basic Grid Layout**
 
 ```css
 .container {
@@ -1456,9 +872,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 } /* Sidebar spanning 2 rows */
 ```
 
----
-
-## **5. Using `grid-template-areas`**
+## **Using `grid-template-areas`**
 
 ```css
 .container {
@@ -1485,9 +899,7 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 }
 ```
 
----
-
-## **6. Common Units in Grid**
+## **Common Units in Grid**
 
 - **`px`** → Fixed size.
 - **`%`** → Relative to container.
@@ -1496,16 +908,12 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 - **`minmax()`** → Dynamic sizing (e.g., `minmax(200px, 1fr)`).
 - **`repeat()`** → Repeat pattern (e.g., `repeat(3, 1fr)`).
 
----
-
-## **7. Best Practices**
+## **Best Practices**
 
 - Use **`fr`** for flexible layouts.
 - Use **`minmax()`** for responsive grids.
 - Use **named areas** for semantic layouts.
 - Use **`auto-fit` / `auto-fill`** for dynamic grid columns.
-
----
 
 ### **Quick Auto-Fit Example (Responsive Cards)**
 
@@ -1516,8 +924,6 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
   gap: 20px;
 }
 ```
-
----
 
 **Flexbox vs Grid:**
 
@@ -1532,8 +938,6 @@ flex: 0 0 100px; /* no grow, no shrink, fixed width */
 
 `CSS Functions` are expressions that return a value, often used inside property values. They can perform `calculations`, `color manipulations`, `transformations`, and more.
 
----
-
 ### 🧮 1. `calc()` — Calculations in CSS
 
 ```css
@@ -1544,8 +948,6 @@ width: calc(100% - 60px);
 ✅ Works with different units (e.g., `% + px`)
 
 > Useful for responsive layouts, dynamic spacing.
-
----
 
 ### 🎨 2. `var()` — CSS Variables
 
@@ -1566,8 +968,6 @@ width: calc(100% - 60px);
 padding: var(--spacing, 10px); /* fallback = 10px */
 ```
 
----
-
 ### 🎨 3. `rgb()`, `rgba()`, `hsl()`, `hsla()` — Colors
 
 ```css
@@ -1579,8 +979,6 @@ background: hsl(120, 100%, 50%);
 ✅ `rgba` and `hsla` allow transparency
 ✅ HSL is great for theming & light/dark manipulation
 
----
-
 ### 📐 4. `url()` — External resources (e.g., images, fonts)
 
 ```css
@@ -1589,8 +987,6 @@ font-face {
   src: url("myfont.woff2");
 }
 ```
-
----
 
 ### 📏 5. `min()`, `max()`, and `clamp()` — Responsive Sizing
 
@@ -1614,8 +1010,6 @@ font-size: clamp(14px, 2vw, 24px);
 
 > 💡 `clamp()` is great for responsive typography.
 
----
-
 ### 🌈 6. `linear-gradient()` & `radial-gradient()`
 
 ```css
@@ -1626,8 +1020,6 @@ background: radial-gradient(circle, #f00, #ff0);
 ✅ Creates smooth transitions between colors
 ✅ Can be layered and animated
 
----
-
 ### 🔁 7. `repeat()` — Grid template repetition
 
 ```css
@@ -1635,8 +1027,6 @@ grid-template-columns: repeat(3, 1fr);
 ```
 
 > 💡 Saves you from writing `1fr 1fr 1fr`
-
----
 
 ### 📦 8. `attr()` — Attribute-based styling (only for `content`)
 
@@ -1648,8 +1038,6 @@ a::after {
 
 > 💡 Limited support — works mostly in `content`
 
----
-
 ### 🧭 9. `translate()`, `scale()`, `rotate()` — Transform functions
 
 ```css
@@ -1658,8 +1046,6 @@ transform: translateX(20px) scale(1.2) rotate(45deg);
 
 ✅ Use in animations, hover effects, or UI transitions.
 
----
-
 ### 🌀 10. `cubic-bezier()` — Custom timing functions
 
 ```css
@@ -1667,8 +1053,6 @@ transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 ```
 
 ✅ Creates smooth animations with custom easing.
-
----
 
 ### 📑 Summary Table
 
@@ -1685,8 +1069,6 @@ transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 | `linear-gradient()` | Gradient backgrounds        |
 | `transform()`       | 2D/3D transformations       |
 | `cubic-bezier()`    | Custom easing in animations |
-
----
 
 ### ⚠️ Tips
 
